@@ -20,9 +20,9 @@
             <img {{bind-attr src=challenge.image_url}} width="100px" height="100px"/>
           </div>
           <div class="span4">
-            <h5>{{#link-to 'challenge' challenge}}{{challenge.title}}{{/link-to}}</h5>
-            <p>{{challenge.tag_line}}</p>
-            <p>Sponsor: {{challenge.sponsor}}</p>
+            <h5>{{#link-to 'challenge' challenge}}{{title}}{{/link-to}}</h5>
+            <p>{{tag_line}}</p>
+            <p>Sponsor: {{sponsor}}</p>
             {{#link-to 'challenge' challenge}}Learn More{{/link-to}}
           </div>
           <div class="span3">
@@ -31,13 +31,25 @@
             <p><span class="dividing-line">-------------</span></p>
           {{/each}}
           {{#each award in challenge.awards}}
-            <p><strong>DEADLINE &nbsp; </strong>{{challenge.index_deadline}}</p>
+            <p><strong>DEADLINE &nbsp; </strong>{{index_deadline}}</p>
             <p><span class="dividing-line">--------------</span></p>
           {{/each}}
-            <p><strong>POSTED &nbsp; </strong>{{challenge.post_date}}</p>
+            <p><strong>POSTED &nbsp; </strong>{{post_date}}</p>
           </div>
           <p class="dot-divider">.....................................................<p>
       </div>
+    {{/each}}
+  </script>
+  
+  <script type="text/x-handlebars" data-template-name='_awards'>
+    {{#each award in challenge.awards}}
+        <p>{{award.value}} - {{award.description}}</p>
+    {{/each}}
+  </script>
+
+  <script type="text/x-handlebars" data-template-name='_deadlines'>
+    {{#each deadline in challenge.deadlines}}
+        <p>{{deadline.date}} - {{deadline.description}}</p>
     {{/each}}
   </script>
   
@@ -48,97 +60,49 @@
   
       <div class="row-2">
         <div class="span2">
-              <img src="images/{{unbound challenge.image_topic}}.jpg" width="100px" height="100px"/>
+        {{model.image_topic}}
+              <img src="images/{{unbound model.image_topic}}.jpg" width="100px" height="100px"/>
             </div>
         <div class="span6">
 
-          <h5>{{challenge.title}}</h5>        
-
-                <p>{{challenge.tag_line}}</p>
-
-                <p>Sponsor: &nbsp;{{challenge.sponsor}}</p>
-
-              <p>Status: &nbsp;{{challenge.status}}</p>
-
-              <br>
-                <div class="detail-highlights"><p>AWARD &nbsp;
-                {{#each award in challenge.awards}}
-            <%= @challenge.awards.max { |a, b| a.value.length == b.value.length ? a.value <=> b.value : a.value.length <=> b.value.length }.value if @challenge.awards %>
-            </p>
-                </div>
-              
-          <div class="detail-highlights"><p>DEADLINE &nbsp;
-                  <%= "See Details Below" if @challenge.deadlines[0].description.length > 10 && @challenge.deadlines[0].date == nil %>
-                  <%= "None" if @challenge.deadlines[0].description.length < 10 && @challenge.deadlines[0].date == nil || @challenge.deadlines.count == 0 %>
-                  <%= dt = @challenge.deadlines.map {|deadline| deadline.date}.min() if @challenge.deadlines;
-                   dt.strftime('%b %e, %Y') if dt %>
-            </p>
-                </div>
+          <h5>{{model.title}}</h5>        
+          <p>{{model.tag_line}}</p>
+          <p>Sponsor: &nbsp;{{model.sponsor}}</p>
+          <p>Status: &nbsp;{{model.status}}</p>
+          <br>
+          <div class="detail-highlights"><p>AWARD &nbsp; {{maxAward model.awards}}</p></div>
+          <div class="detail-highlights"><p>DEADLINE &nbsp; </p></div>
 
           <div class="detail-highlights"><p id="challenge-url">WEBSITE 
-              <%= link_to 'Challenge Website', @challenge.url, :target => "_blank" %>
+              <a href="{{unbound model.url}}" target="_blank">Challenge Website</a>
             </p><br>
           </div>
       
           <div class="detail-highlights"><p>SUMMARY</p></div>
-          <p>
-            <%=raw @challenge.summary.gsub(/\n/, '<br>').html_safe %>
-          </p>
-          <br>
-         <!--  <p>
-            <b>Image url:</b>
-          <%= @challenge.image_url %>
-          </p> -->
+          <p>{{model.summary}}</p><br/>
           <div class="detail-highlights"><p>RULES</p></div>
-          <p><%=raw @challenge.rules.gsub(/\n/, '<br>').html_safe %>
-          </p>
+          <p>{{model.rules}}</p>
       
           <div class="detail-highlights"><p></p></div>
-          <p><%=raw @challenge.eligibility.gsub(/\n/, '<br>').html_safe %>
-          </p>
+          <p>{{model.eligibility}}</p>
       
           <div class="detail-highlights"><p></p></div>
-          <p><%=raw @challenge.fee.gsub(/\n/, '<br>').html_safe %>
-          </p><br>
+          <p>{{model.fee}}</p><br>
 
           <div class="detail-highlights"><p>AWARD</p></div>
-          <p><%= render :partial => "challenges/awards", :object => @challenge.awards %>
-          </p><br>
+          <p>{{partial "awards"}}</p><br>
 
           <div class="detail-highlights"><p>DEADLINE</p></div>
-          <p><%= render :partial => "challenges/deadlines", :object => @challenge.deadlines %>
-          </p><br>
+          <p>{{partial "deadlines"}}</p><br>
 
           <div class="detail-highlights"><p>POST DATE</p></div>
-          <p><%= @challenge.post_date.strftime('%b %e, %Y') if @challenge.post_date %>
-          </p><br>      
+          <p>{{model.post_date}}
+          </p><br>
 
           <div class="detail-highlights"><p>CONTACT INFORMATION</p></div>
-          <p><%=raw @challenge.contact_info.gsub(/\n/, '<br>').html_safe %>
-          </p><br>
-      
-
-          <div class="detail-highlights"><p>SHARE</p></div>
-            <span class="fb-share-button">
-              <a href="#" 
-                onclick="
-                window.open(
-                  'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('<%= @challenge.url %>'), 
-                  'facebook-share-dialog', 
-                  'width=626,height=436'); 
-                return false;">
-                Facebook &nbsp;
-              </a>
-            </span>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= @challenge.url %>" data-text="<%= @challenge.title %> @ChallengeFinder" data-count="none">Tweet</a>
-                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-      
-      
+          <p>{{model.contact_info}}</p><br>
         </div>
-
-      
       </div>
-    
     </div>
   </script>
 

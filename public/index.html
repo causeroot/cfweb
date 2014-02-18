@@ -3,116 +3,231 @@
 <head>
   <meta charset="utf-8">
   <title>ChallengeFinder</title>
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <script type="text/x-handlebars">
-    <h2>ChallengeFinder</h2>
-
-    {{outlet}}
-  </script>
-
-  <script type="text/x-handlebars" id="index">
-    {{#each challenge in model}}
-      <div class="row-2">
-          <div class="span2">
-            <img {{bind-attr src=challenge.image_url}} width="100px" height="100px"/>
-          </div>
-          <div class="span4">
-            <h5>{{#link-to 'challenge' challenge}}{{title}}{{/link-to}}</h5>
-            <p>{{tag_line}}</p>
-            <p>Sponsor: {{sponsor}}</p>
-            {{#link-to 'challenge' challenge}}Learn More{{/link-to}}
-          </div>
-          <div class="span3">
-          {{#each award in challenge.awards}}
-            <p><strong>AWARD &nbsp; </strong>Variable (See Details)</p>
-            <p><span class="dividing-line">-------------</span></p>
-          {{/each}}
-          {{#each award in challenge.awards}}
-            <p><strong>DEADLINE &nbsp; </strong>{{index_deadline}}</p>
-            <p><span class="dividing-line">--------------</span></p>
-          {{/each}}
-            <p><strong>POSTED &nbsp; </strong>{{post_date}}</p>
-          </div>
-          <p class="dot-divider">.....................................................<p>
-      </div>
-    {{/each}}
-  </script>
-  
-  <script type="text/x-handlebars" data-template-name='_awards'>
-    {{#each award in challenge.awards}}
-        <p>{{award.value}} - {{award.description}}</p>
-    {{/each}}
-  </script>
-
-  <script type="text/x-handlebars" data-template-name='_deadlines'>
-    {{#each deadline in challenge.deadlines}}
-        <p>{{deadline.date}} - {{deadline.description}}</p>
-    {{/each}}
-  </script>
-  
-  <script type="text/x-handlebars" id="challenge">
-    <h1 class="page-header">// CHALLENGES</h1>
-  
-    <div class="span8">
-  
-      <div class="row-2">
-        <div class="span2">
-        {{model.image_topic}}
-              <img src="images/{{unbound model.image_topic}}.jpg" width="100px" height="100px"/>
-            </div>
-        <div class="span6">
-
-          <h5>{{model.title}}</h5>        
-          <p>{{model.tag_line}}</p>
-          <p>Sponsor: &nbsp;{{model.sponsor}}</p>
-          <p>Status: &nbsp;{{model.status}}</p>
-          <br>
-          <div class="detail-highlights"><p>AWARD &nbsp; {{maxAward model.awards}}</p></div>
-          <div class="detail-highlights"><p>DEADLINE &nbsp; </p></div>
-
-          <div class="detail-highlights"><p id="challenge-url">WEBSITE 
-              <a href="{{unbound model.url}}" target="_blank">Challenge Website</a>
-            </p><br>
-          </div>
-      
-          <div class="detail-highlights"><p>SUMMARY</p></div>
-          <p>{{model.summary}}</p><br/>
-          <div class="detail-highlights"><p>RULES</p></div>
-          <p>{{model.rules}}</p>
-      
-          <div class="detail-highlights"><p></p></div>
-          <p>{{model.eligibility}}</p>
-      
-          <div class="detail-highlights"><p></p></div>
-          <p>{{model.fee}}</p><br>
-
-          <div class="detail-highlights"><p>AWARD</p></div>
-          <p>{{partial "awards"}}</p><br>
-
-          <div class="detail-highlights"><p>DEADLINE</p></div>
-          <p>{{partial "deadlines"}}</p><br>
-
-          <div class="detail-highlights"><p>POST DATE</p></div>
-          <p>{{model.post_date}}
-          </p><br>
-
-          <div class="detail-highlights"><p>CONTACT INFORMATION</p></div>
-          <p>{{model.contact_info}}</p><br>
-        </div>
-      </div>
-    </div>
-  </script>
-
   <script src="js/libs/jquery-1.11.0.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <script src="js/libs/handlebars-1.1.2.js"></script>
-  <script src="js/libs/ember-1.4.0.js"></script>
-  <script src="js/libs/ember-model-latest.js"></script>
-  <script src="js/app.js"></script>
-  <!-- to activate the test runner, add the "?test" query string parameter -->
-  <script src="tests/runner.js"></script>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="/stylesheets/application.css?body=1" media="all" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/bootstrap_and_overrides.css?body=1" media="all" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/scaffolds.css?body=1" media="all" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  
+  <div class="container">
+	
+<div class="navbar">
+	<div class="logo-area">
+		<a href="/challenges">
+          <img src="/images/challenge_finder_logo.png" />
+        </a>
+	</div>
+
+</div>
+	<div class="page-border">
+    	<div class="row">
+      		<div class="span12"><div>
+	<h1 class="page-header">// CHALLENGES</h1>
+
+	<div class="page-header" id="login">
+	</div>
+</div>
+
+<div class="top-subtext">
+	<span class="sorting-links">
+
+    <a href="/?sort=deadline_d" onClick="cf_sort(challenges, 'deadline'); render_challenges(); return false;">Deadline</a>
+     &nbsp;|&nbsp;
+    <a href="/?sort=posted_d" onClick="cf_sort(challenges, 'post_date'); render_challenges(); return false;">Date Posted</a>
+     &nbsp;|&nbsp;
+    <a href="/?sort=award_d" onClick="cf_sort(challenges, 'award'); render_challenges(); return false;">Award</a>
+    
+
+    </span>
+       <span id="page-numbers">  <nav class="pagination">
+    
+    
+        <span class="page current">
+    <a href="/">1</a>
+</span>
+
+        <span class="page">
+    <a href="/?page=2" rel="next">2</a>
+</span>
+
+    <span class="next">
+  <a href="/?page=2" rel="next">&rsaquo;</a>
+</span>
+
+    <span class="last">
+  <a href="/?page=2">&raquo;</a>
+</span>
+
+  </nav>
+
+       </span>
+
+</div>
+
+<div class="span8" id="content">
+
+<div class="span11">
+  <span id="page-numbers">  <nav class="pagination">
+    
+    
+        <span class="page current">
+    <a href="/">1</a>
+</span>
+
+        <span class="page">
+    <a href="/?page=2" rel="next">2</a>
+</span>
+
+    <span class="next">
+  <a href="/?page=2" rel="next">&rsaquo;</a>
+</span>
+
+    <span class="last">
+  <a href="/?page=2">&raquo;</a>
+</span>
+
+  </nav>
+</span>
+</div>
+          </div>      
+      </div>
+    </div>
+
+  <!-- Start of Footer -->  
+    <footer>
+      <script type="text/x-handlebars">
+      <h2>ChallengeFinder</h2>
+
+      {{outlet}}
+    </script>
+
+    <script type="text/x-handlebars" id="index">
+      {{#each challenges}}
+        <div class="row-2">
+            <div class="span2">
+              <img {{bind-attr src=image_url}} width="100px" height="100px"/>
+            </div>
+            <div class="span4">
+              <h5>{{title}}</h5>
+              <p>{{tag_line}}</p>
+              <p>Sponsor: {{sponsor}}</p>
+              Learn More
+            </div>
+            <div class="span3">
+            {{#each awards}}
+              <p><strong>AWARD &nbsp; </strong>Variable (See Details)</p>
+              <p><span class="dividing-line">-------------</span></p>
+            {{/each}}
+            {{#each deadlines}}
+              <p><strong>DEADLINE &nbsp; </strong>{{index_deadline}}</p>
+              <p><span class="dividing-line">--------------</span></p>
+            {{/each}}
+              <p><strong>POSTED &nbsp; </strong>{{post_date}}</p>
+            </div>
+            <p class="dot-divider">.....................................................<p>
+        </div>
+      {{/each}}
+    </script>
+  
+    <script type="text/x-handlebars" data-template-name='_awards'>
+      {{#each awards}}
+          <p>{{value}} - {{description}}</p>
+      {{/each}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name='_deadlines'>
+      {{#each deadlines}}
+          <p>{{date}} - {{description}}</p>
+      {{/each}}
+    </script>
+  
+    <script type="text/x-handlebars" id="challenge">
+      <h1 class="page-header">// CHALLENGES</h1>
+  
+      <div class="span8">
+  
+        <div class="row-2">
+          <div class="span2">
+          {{model.image_topic}}
+                <img src="images/{{unbound model.image_topic}}.jpg" width="100px" height="100px"/>
+              </div>
+          <div class="span6">
+
+            <h5>{{model.title}}</h5>        
+            <p>{{model.tag_line}}</p>
+            <p>Sponsor: &nbsp;{{model.sponsor}}</p>
+            <p>Status: &nbsp;{{model.status}}</p>
+            <br>
+            <div class="detail-highlights"><p>AWARD &nbsp; {{maxAward model.awards}}</p></div>
+            <div class="detail-highlights"><p>DEADLINE &nbsp; </p></div>
+
+            <div class="detail-highlights"><p id="challenge-url">WEBSITE 
+                <a href="{{unbound model.url}}" target="_blank">Challenge Website</a>
+              </p><br>
+            </div>
+      
+            <div class="detail-highlights"><p>SUMMARY</p></div>
+            <p>{{model.summary}}</p><br/>
+            <div class="detail-highlights"><p>RULES</p></div>
+            <p>{{model.rules}}</p>
+      
+            <div class="detail-highlights"><p></p></div>
+            <p>{{model.eligibility}}</p>
+      
+            <div class="detail-highlights"><p></p></div>
+            <p>{{model.fee}}</p><br>
+
+            <div class="detail-highlights"><p>AWARD</p></div>
+            <p>{{partial "awards"}}</p><br>
+
+            <div class="detail-highlights"><p>DEADLINE</p></div>
+            <p>{{partial "deadlines"}}</p><br>
+
+            <div class="detail-highlights"><p>POST DATE</p></div>
+            <p>{{model.post_date}}
+            </p><br>
+
+            <div class="detail-highlights"><p>CONTACT INFORMATION</p></div>
+            <p>{{model.contact_info}}</p><br>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script src="js/app.js"></script>
+    <script>
+      $(function() {
+        console.log("ready()");
+
+        $.getJSON("js/data.json").then(function(data) {
+          challenges = sort_challenges(data, 'deadlines');
+          render_challenges();
+        });
+      });
+    </script>  
+    
+    <!-- to activate the test runner, add the "?test" query string parameter -->
+    <script src="tests/runner.js"></script>
+      
+     
+       <table>
+         <tbody>
+          <tr><a href="/challenges">CHALLENGES</a>
+            <a href="/about">ABOUT&nbsp;US</a>
+            <a href="/privacy">LEGAL</a>        
+           </tr>
+        </tbody>
+       </table>
+     
+     <div class="copyright"> Copyright 2013 ChallengeFinder</div>
+    </footer>
+  </div>
+<!-- End of Footer -->
 </body>
-</html>
+</html>  
+  

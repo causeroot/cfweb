@@ -27,12 +27,17 @@ Handlebars.registerHelper('link', function(challenge) {
 
 function route_request(hash) {
 	var CHALLENGE_ROUTE = '#/challenge/';
+	var SORT_ROUTE = '#sort=';
 	console.log('Routing for ' + hash);
 	if (hash.substring(0, CHALLENGE_ROUTE.length) === CHALLENGE_ROUTE) {
 		var id = hash.replace(CHALLENGE_ROUTE, '');
 		var challenge = findChallenge(id);
         console.log(challenge);
 		render_challenge(challenge);
+	} else if (hash.substring(0, SORT_ROUTE.length) === SORT_ROUTE) {
+		var sort_by = hash.replace(SORT_ROUTE, '');
+		cf_sort(challenges, sort_by);
+		render_challenges();
 	} else {
         render_challenges();
 	}

@@ -7,11 +7,16 @@ props['post_date'] = false;
 props['award'] = false;
 
 Handlebars.registerHelper('to_html', function(str) {
-  console.log(str);
 //  var re = /[\n|\s]+(\w+)[\n]+/g;
 //  str = str.replace(re, "<br /><strong>$1</strong><br />");
   str = str.replace(/\n/g, "<br />");
   return new Handlebars.SafeString(str);
+});
+
+Handlebars.registerHelper('date_str', function(d) {
+  return new Handlebars.SafeString(
+    moment(d).format('ll')
+  );
 });
 
 Handlebars.registerHelper('link', function(challenge) {
@@ -19,8 +24,6 @@ Handlebars.registerHelper('link', function(challenge) {
     "<a href='#/challenge/" + challenge.id + "'>" + challenge.title + "</a>"
   );
 });
-
-
 
 function route_request(hash) {
 	var CHALLENGE_ROUTE = '#/challenge/';
@@ -103,6 +106,7 @@ function sort_awards(awards) {
       var bval = Number(b.value.replace(/[^0-9\.]+/g,""));
       if (aval == bval) return 0;
       if (a.value > b.value) {
+		  console.log(a.value + ' > ' + b.value);
         return -1;
       } else {
         return 1;

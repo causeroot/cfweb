@@ -6,6 +6,7 @@
   <script src="js/libs/jquery-1.11.0.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <script src="js/libs/handlebars-1.1.2.js"></script>
+  <script src="js/libs/moment.min.js"></script>
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
   <link href="/stylesheets/application.css?body=1" media="all" rel="stylesheet" type="text/css" />
@@ -119,15 +120,11 @@
               Learn More
             </div>
             <div class="span3">
-            {{#each awards}}
-              <p><strong>AWARD &nbsp; </strong>Variable (See Details)</p>
+              <p><strong>AWARD &nbsp; </strong>{{top_award}}</p>
               <p><span class="dividing-line">-------------</span></p>
-            {{/each}}
-            {{#each deadlines}}
-              <p><strong>DEADLINE &nbsp; </strong>{{index_deadline}}</p>
+              <p><strong>DEADLINE &nbsp; </strong>{{date_str top_deadline}}</p>
               <p><span class="dividing-line">--------------</span></p>
-            {{/each}}
-              <p><strong>POSTED &nbsp; </strong>{{post_date}}</p>
+              <p><strong>POSTED &nbsp; </strong>{{date_str post_date}}</p>
             </div>
             <p class="dot-divider">.....................................................<p>
         </div>
@@ -151,7 +148,7 @@
             <p>Status: &nbsp;{{status}}</p>
             <br>
             <div class="detail-highlights"><p>AWARD &nbsp; {{top_award}}</p></div>
-            <div class="detail-highlights"><p>DEADLINE &nbsp; {{top_deadline}}</p></div>
+            <div class="detail-highlights"><p>DEADLINE &nbsp; {{date_str top_deadline}}</p></div>
 
             <div class="detail-highlights"><p id="challenge-url">WEBSITE 
                 <a href="{{url}}" target="_blank">Challenge Website</a>
@@ -177,12 +174,12 @@
 
             <div class="detail-highlights"><p>DEADLINE</p></div>
 	        {{#each deadlines}}
-	            <p>{{date}} - {{description}}</p>
+	            <p>{{date_str date}} - {{description}}</p>
 	        {{/each}}
             <br>
 
             <div class="detail-highlights"><p>POST DATE</p></div>
-            <p>{{post_date}}
+            <p>{{date_str post_date}}
             </p><br>
 
             <div class="detail-highlights"><p>CONTACT INFORMATION</p></div>

@@ -14,7 +14,7 @@
 </head>
 <body>
   
-  <div class="container">
+<div class="container">
 	
 <div class="navbar">
 	<div class="logo-area">
@@ -69,7 +69,7 @@
 
 </div>
 
-<div class="span8" id="content">
+<div id="content">
 
 <div class="span11">
   <span id="page-numbers">  <nav class="pagination">
@@ -110,10 +110,10 @@
       {{#each challenges}}
         <div class="row-2">
             <div class="span2">
-              <img {{bind-attr src=image_url}} width="100px" height="100px"/>
-            </div>
+			  <img src="images/{{image_topic}}.jpg" width="100px" height="100px"/>
+			  </div>
             <div class="span4">
-              <h5>{{title}}</h5>
+              <h5>{{link this}}</h5>
               <p>{{tag_line}}</p>
               <p>Sponsor: {{sponsor}}</p>
               Learn More
@@ -134,82 +134,66 @@
       {{/each}}
     </script>
   
-    <script type="text/x-handlebars" data-template-name='_awards'>
-      {{#each awards}}
-          <p>{{value}} - {{description}}</p>
-      {{/each}}
-    </script>
-
-    <script type="text/x-handlebars" data-template-name='_deadlines'>
-      {{#each deadlines}}
-          <p>{{date}} - {{description}}</p>
-      {{/each}}
-    </script>
-  
     <script type="text/x-handlebars" id="challenge">
-      <h1 class="page-header">// CHALLENGES</h1>
-  
+	<div class="span11">
+	
       <div class="span8">
   
         <div class="row-2">
           <div class="span2">
-          {{model.image_topic}}
-                <img src="images/{{unbound model.image_topic}}.jpg" width="100px" height="100px"/>
+                <img src="images/{{image_topic}}.jpg" width="100px" height="100px"/>
               </div>
           <div class="span6">
 
-            <h5>{{model.title}}</h5>        
-            <p>{{model.tag_line}}</p>
-            <p>Sponsor: &nbsp;{{model.sponsor}}</p>
-            <p>Status: &nbsp;{{model.status}}</p>
+            <h5>{{title}}</h5>        
+            <p>{{tag_line}}</p>
+            <p>Sponsor: &nbsp;{{sponsor}}</p>
+            <p>Status: &nbsp;{{status}}</p>
             <br>
-            <div class="detail-highlights"><p>AWARD &nbsp; {{maxAward model.awards}}</p></div>
-            <div class="detail-highlights"><p>DEADLINE &nbsp; </p></div>
+            <div class="detail-highlights"><p>AWARD &nbsp; {{top_award}}</p></div>
+            <div class="detail-highlights"><p>DEADLINE &nbsp; {{top_deadline}}</p></div>
 
             <div class="detail-highlights"><p id="challenge-url">WEBSITE 
-                <a href="{{unbound model.url}}" target="_blank">Challenge Website</a>
+                <a href="{{url}}" target="_blank">Challenge Website</a>
               </p><br>
             </div>
       
             <div class="detail-highlights"><p>SUMMARY</p></div>
-            <p>{{model.summary}}</p><br/>
+            <p>{{to_html summary}}</p><br/>
             <div class="detail-highlights"><p>RULES</p></div>
-            <p>{{model.rules}}</p>
+            <p>{{to_html rules}}</p>
       
             <div class="detail-highlights"><p></p></div>
-            <p>{{model.eligibility}}</p>
+            <p>{{to_html eligibility}}</p>
       
             <div class="detail-highlights"><p></p></div>
-            <p>{{model.fee}}</p><br>
+            <p>{{fee}}</p><br>
 
             <div class="detail-highlights"><p>AWARD</p></div>
-            <p>{{partial "awards"}}</p><br>
+	        {{#each awards}}
+	            <p>{{value}} - {{description}}</p>
+	        {{/each}}
+			<br>
 
             <div class="detail-highlights"><p>DEADLINE</p></div>
-            <p>{{partial "deadlines"}}</p><br>
+	        {{#each deadlines}}
+	            <p>{{date}} - {{description}}</p>
+	        {{/each}}
+            <br>
 
             <div class="detail-highlights"><p>POST DATE</p></div>
-            <p>{{model.post_date}}
+            <p>{{post_date}}
             </p><br>
 
             <div class="detail-highlights"><p>CONTACT INFORMATION</p></div>
-            <p>{{model.contact_info}}</p><br>
+            <p>{{contact_info}}</p><br>
           </div>
         </div>
       </div>
+	  </div>
     </script>
 
     <script src="js/app.js"></script>
-    <script>
-      $(function() {
-        console.log("ready()");
-
-        $.getJSON("js/data.json").then(function(data) {
-          challenges = sort_challenges(data, 'deadlines');
-          render_challenges();
-        });
-      });
-    </script>  
     
     <!-- to activate the test runner, add the "?test" query string parameter -->
     <script src="tests/runner.js"></script>
@@ -217,10 +201,10 @@
      
        <table>
          <tbody>
-          <tr><a href="/challenges">CHALLENGES</a>
+          <tr><td><a href="/challenges">CHALLENGES</a>
             <a href="/about">ABOUT&nbsp;US</a>
             <a href="/privacy">LEGAL</a>        
-           </tr>
+           </td></tr>
         </tbody>
        </table>
      

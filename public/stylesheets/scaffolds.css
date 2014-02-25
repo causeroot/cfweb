@@ -24,6 +24,10 @@ h1 {
 	font-size: 14px;
 	font-weight: normal;
 	color: #006838;
+	display: inline;
+    border-bottom: medium none;
+    padding-right: 60px;
+    padding-bottom: 0px;
 	}
 
 h5 {
@@ -58,10 +62,16 @@ div {
 }
 
 .row {
+	display: table;
+    content: "";
+    line-height: 0;
 	margin-bottom: 40px;
 	background-color: #FFFFFF;
 	min-height: 550px;
 	padding-top: 20px;
+
+}
+	
 	}
 
 @media (max-width: 767px) {
@@ -73,7 +83,6 @@ div {
 .row-2 {
 	margin-bottom: 30px;
 	display: inline-block;
-	
 	}
 
 @media (max-width: 520px) {
@@ -128,15 +137,19 @@ div {
 	}
 
 .span2 {
+	float: left;
 	width: 110px;
 	margin-left: 0;
 	margin-bottom: 10px;
 	}
 
 .span3 p {
+	float: left;
+	width: 220px;	
+    margin-left: 20px;
+    margin-bottom: 0;
 	color: #000000;
-	padding-left: 20px;
-	margin-bottom: 0;
+    min-height: 1px;
 	font-size: 12px;
 	}
 	
@@ -151,8 +164,12 @@ div {
 		}}
 		
 .span4 {
+	float: left;
+    min-height: 1px;
+    margin-left: 20px;
 	max-width: 324px;
 	margin-bottom: 16px;
+	width: 300px;
 	}
 
 .span4 a {
@@ -162,6 +179,8 @@ div {
 	margin-left: 0;
 	color: #669900;
 	background: none;
+	max-width: 324px;
+    margin-bottom: 16px;
   } 
 	}
 	
@@ -178,6 +197,8 @@ div {
 	}
 			
 .span8 {
+	float: left;
+	width: 620px;
 	margin-top: 40px;
 	margin-left: 0px;
 	}
@@ -189,12 +210,18 @@ div {
 .span11 {
 	margin-bottom: 20px;
 	}
+	
+.span12 {
+	width: 940px;
+	float: left;
+    min-height: 1px;
+    margin-left: 20px;
+    }
 
 @media (max-width: 980px) {
     .right-column {
-
-    	clear: both;
-    	}}
+    clear: both;
+    }}
 
 #twitter-widget-0 {
 	height: auto;
@@ -353,6 +380,7 @@ input.search-query {
 	
 .top-subtext {
 	margin-bottom: 40px;
+	line-height: 18px;
 	}
 	
 .sorting-links a {

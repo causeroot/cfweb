@@ -19,10 +19,16 @@ Handlebars.registerHelper('date_str', function(d) {
   );
 });
 
-Handlebars.registerHelper('link', function(challenge) {
-  return new Handlebars.SafeString(
-    "<a href='#/challenge/" + challenge.id + "'>" + challenge.title + "</a>"
-  );
+Handlebars.registerHelper('link', function(challenge, target) {
+  if (null != target) {
+    return new Handlebars.SafeString(
+      "<a href='#/challenge/" + challenge.id + "' target='" + target + "'>" + challenge.title + "</a>"
+    );
+  } else {
+    return new Handlebars.SafeString(
+      "<a href='#/challenge/" + challenge.id + "'>" + challenge.title + "</a>"
+    );
+  }  
 });
 
 function route_request(hash) {

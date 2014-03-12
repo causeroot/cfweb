@@ -13,5 +13,13 @@ if [ ! "$(which mongoose)" ]; then
 fi
 cd $DIR/../public/
 echo "Launching webserver in directory: $(pwd)"
-open "http://localhost:4000"
-mongoose -listening_port 4000 -enable_directory_listing yes
+mongoose -listening_port 4000 -enable_directory_listing yes &
+MONGOOSE_PID=$!
+trap "echo Killing web server...; kill $MONGOOSE_PID; exit;" SIGINT SIGTERM ERR
+sleep 1
+if [ -d /Applications/Google\ Chrome.app ]; then
+  open -a Google\ Chrome "http://localhost:4000"
+else
+  open "http://localhost:4000"
+fi
+wait $MONGOOSE_PID 

@@ -9,29 +9,35 @@
  * Date: March 6th, 2014
  */
 
-var Challenges = function(data) {
+var Model = function(data) {
   this.data = typeof data !== 'undefined' ? data : null;
-  this.challenges = data;
+  this.challenges = [];
 
-  if (this.challenges.length > 0) {
+  if (data != null) {
+    console.log("Setting data");
+//    console.log(JSON.stringify(data, null, 4));
     this.set_challenges(data)
   }
 }
 
-Challenges.prototype.set_challenges = function(data) {
+Object.defineProperty(Model.prototype, 'length', {length: function() {
+   return this.challenges.length;
+}});
+
+Model.prototype.set_challenges = function(data) {
   this.data = typeof data !== 'undefined' ? data : null;  
   
   // loop through each challenge and sort the awards and
   // deadlines so the largest/closest are at the top.
-  for (i = 0; i < challenges.length; i++) {
-    challenges[i].awards = this.sort_awards(challenges[i].awards);
-    if (challenges[i].awards[0]) challenges[i].top_award = challenges[i].awards[0].value;
-      challenges[i].deadlines = this.sort_deadlines(challenges[i].deadlines);
-    if (challenges[i].deadlines[0]) challenges[i].top_deadline = challenges[i].deadlines[0].date;
+  for (i = 0; i < this.challenges.length; i++) {
+    this.challenges[i].awards = this.sort_awards(challenges[i].awards);
+    if (challenges[i].awards[0]) this.challenges[i].top_award = this.challenges[i].awards[0].value;
+      this.challenges[i].deadlines = this.sort_deadlines(challenges[i].deadlines);
+    if (challenges[i].deadlines[0]) this.challenges[i].top_deadline = this.challenges[i].deadlines[0].date;
   }
 }
 
-Challenges.prototype.sort_awards = function(awards) {
+Model.prototype.sort_awards = function(awards) {
   return awards.sort(function(a, b) {
     if (a.value && b.value) {
       var aval = Number(a.value.replace(/[^0-9\.]+/g,""));
@@ -46,7 +52,7 @@ Challenges.prototype.sort_awards = function(awards) {
   });
 }
 
-Challenges.prototype.sort_deadlines = function(deadlines) {
+Model.prototype.sort_deadlines = function(deadlines) {
   return deadlines.sort(function(a, b) {
     if (a.date && b.date) {
       var date1 = new Date(a.date);
@@ -67,15 +73,11 @@ Challenges.prototype.sort_deadlines = function(deadlines) {
   });
 }
 
-Object.defineProperty(Challenges.prototype, 'length', {get: function() {
-   return this.challenges.length;
-}});
-
-Challenges.prototype.get_challenge_at = function (index) {
+Model.prototype.get_challenge_at = function (index) {
   return this.challenges[index];
 }
 
-Challenges.prototype.cf_sort = function (c, prop) {
+Model.prototype.cf_sort = function (c, prop) {
   props[prop] = !props[prop];
   if (props[prop]) {
     console.log('true');
@@ -93,12 +95,12 @@ Challenges.prototype.cf_sort = function (c, prop) {
   }
 }
 
-Challenges.prototype.sort_by_award = function() {
+Model.prototype.sort_by_award = function() {
   return sort();
 }
 
-Challenges.prototype.sort_by_deadline = function(c, asc) {
-  challenges = challenges.sort(function(a, b) {
+Model.prototype.sort_by_deadline = function(c, asc) {
+  this.challenges = this.challenges.sort(function(a, b) {
     if ((a.deadlines[0] && b.deadlines[0]) && (a.deadlines[0].date && b.deadlines[0].date)) {
       var date1 = new Date(a.deadlines[0].date);
       var date2 = new Date(b.deadlines[0].date);
@@ -124,7 +126,7 @@ Challenges.prototype.sort_by_deadline = function(c, asc) {
   });
 }
 
-Challenges.prototype.sort_by_award = function(c, asc) {
+Model.prototype.sort_by_award = function(c, asc) {
   return c.sort(function(a, b) {
     if (a.awards[0] && b.awards[0]) {
       if (a.awards[0].value && b.awards[0].value) {
@@ -149,7 +151,7 @@ Challenges.prototype.sort_by_award = function(c, asc) {
     });  
 }
 
-Challenges.prototype.sort_by_date = function(c, asc){
+Model.prototype.sort_by_date = function(c, asc){
   return c.sort(function(a, b) {
     var date1 = new Date(a.post_date);
     var date2 = new Date(b.post_date);
@@ -171,12 +173,12 @@ Challenges.prototype.sort_by_date = function(c, asc){
   });
 }
 
-Challenges.prototype.find_challenge = function(id) {
-  console.log("Finding challenge with id " + id + " from " + challenges.length + " challenges.");
-  for (i = 0; i < challenges.length; i++) {
+Model.prototype.find_challenge = function(id) {
+  console.log("Finding challenge with id " + id + " from " + this.challenges.length + " this.challenges.");
+  for (i = 0; i < this.challenges.length; i++) {
       console.log(challenges[i].id + " == " + id);
       if(challenges[i].id == id) {
-        return challenges[i];
+        return this.challenges[i];
       }
   }
 }

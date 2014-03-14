@@ -14,23 +14,6 @@ Controller.prototype.set_cookie = function(name, value) {
   document.cookie = name + '=' + value + '; expires=' + CookieDate.toGMTString() + ';';
 }
 
-Controller.prototype.route_request = function(hash) {
-	var CHALLENGE_ROUTE = '#/challenge/';
-	var SORT_ROUTE = '#sort=';
-	console.log('Routing for ' + hash);
-	if (hash.substring(0, CHALLENGE_ROUTE.length) === CHALLENGE_ROUTE) {
-    var id = hash.replace(CHALLENGE_ROUTE, '');
-    var challenge = findChallenge(id);
-    console.log(challenge);
-		view.render_challenge(challenge);
-	} else if (hash.substring(0, SORT_ROUTE.length) === SORT_ROUTE) {
-    var sort_by = hash.replace(SORT_ROUTE, '');
-    view.render_challenges();
-	} else {
-    view.render_challenges();
-	}
-}
-
 Controller.prototype.set_cookie = function(name, value) {
   var CookieDate = new Date;
   CookieDate.setFullYear(CookieDate.getFullYear( ) +10);

@@ -1,14 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>ChallengeFinder</title>
     </head>
     <body>
-        <div id="container">&nbsp;</div>
+        <div id="container" class="containe">&nbsp;</div>
+        
+        <script type="text/x-handlebars" id="index">
+          <div class="span8">
+          {{#each challenges}}
+            <div class="row-2">
+              <div class="span2"><img src="images/{{image_topic}}.jpg" width="100px" height="100px" /></div>
+              <div class="span4">
+                <h5>{{link this}}</h5>
+                <p>{{tag_line}}</p>
+                <p>Sponsor: &nbsp; {{sponsor}}</p>
+                <a href="/#/challenge/{{id}}" target="_blank">Learn More</a>
+              </div>
+              <div class="span3">
+                <p><strong>AWARD &nbsp; </strong>{{top_award}}</p>
+                <p><span class="dividing-line">
+                —————————————</span></p>
+                <p><strong>DEADLINE &nbsp; </strong>{{date_str top_deadline}}</p>
+                <p><span class="dividing-line">—————————————</span></p>
+                <p><strong>POSTED &nbsp; </strong>{{date_str post_date}}</p>
+              </div>
+              <p class="dot-divider">.....................................................</p>
+              <p></p>
+            </div>
+          {{/each}}
+          </div>
+          <div class="right-column">
+            <div class="span3" id="search-area">&nbsp;
+            <p>SEARCH</p>
+            <div class="navbar-searchbox">
+            <!--	<%= form_tag search_challenges_path, :method => :get, :class => "navbar-search pull-right" do %>	
+            <%= text_field_tag :q, params[:q], :class => "search-query", :placeholder => "Search" %> -->	
+            </div>
+            <div class="search-submit-clear">
+              <!--	<%= submit_tag "Submit", :class => "submit-button", :name => nil %>
+              <%= link_to "Clear&nbsp;Search".html_safe %> -->
+              </div>
+              <!--	<% end %> -->
+            </div>
+          </div>
+          <div class="span3">
+            <a class="twitter-timeline" href="https://twitter.com/ChallengeFinder" data-widget-id="368234616827572226">Tweets by @ChallengeFinder</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </div>
+          <div class="span11">
+            <span id="page-numbers">
+
+            </span>
+          </div>
+        </div>
+        </script>
+
+        <script type="text/x-handlebars" id="challenge">
+          <div class="span11">
+            <div class="span8">
+            <div class="row-2">
+            <div class="span2">
+          <img height="100px" width="100px" src="images/{{image_topic}}.jpg" />
+          </div>
+          <div class="span6">
+          <h5>{{title}}</h5>
+          <p>{{tag_line}}</p>
+          <p>Sponsor: &nbsp;{{sponsor}}</p>
+          <p>Status: &nbsp;{{status}}</p>
+          <br>
+          <div class="detail-highlights"><p>AWARD &nbsp; {{top_award}}</p></div>
+          <div class="detail-highlights"><p>DEADLINE &nbsp; {{date_str top_deadline}}</p></div>
+          <div class="detail-highlights"><p id="challenge-url">WEBSITE
+          <a href="{{url}}" target="_blank">Challenge Website</a>
+          </p><br>
+          </div>
+          <div class="detail-highlights"><p>SUMMARY</p></div>
+          <p>{{to_html summary}}</p><br/>
+          <div class="detail-highlights"><p>RULES</p></div>
+          <p>{{to_html rules}}</p>
+          <div class="detail-highlights">
+          <p></p>
+          </div>
+          <p>{{to_html eligibility}}</p>
+          <div class="detail-highlights">
+          <p></p>
+          </div>
+          <p>{{fee}}</p>
+          <br>
+          <div class="detail-highlights">
+          <p>AWARD</p>
+          </div>
+          {{#each awards}}
+          <p>{{value}} - {{description}}</p>
+          {{/each}}
+          <br>
+          <div class="detail-highlights">
+          <p>DEADLINE</p>
+          </div>
+          {{#each deadlines}}
+          <p>{{date_str date}} - {{description}}</p>
+          {{/each}}
+          <br>
+          <div class="detail-highlights">
+          <p>POST DATE</p>
+          </div>
+          <p>{{date_str post_date}}</p>
+          <br>
+          <div class="detail-highlights"><p>CONTACT INFORMATION</p></div>
+          <p>{{contact_info}}</p><br>
+          </div>
+          </div>
+          </div>
+          </div>
+        </script>
+            
         <script src="js/jquery.js"></script>
         <script src="js/underscore.js"></script>
         <script src="js/handlebars.js"></script>
         <script src="js/backbone.js"></script>
-        <script src="js/main.js"></script>        
+        <script src="js/main.js"></script>
     </body>
 </html>

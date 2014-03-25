@@ -29,7 +29,12 @@ var ChallengeView = Backbone.View.extend({
   //      content will be rendered.
   el: '#container',
   // It's the first function called when this view it's instantiated.
+  renderChallenges: function() {
+    console.log("Render Challenges was called.");
+  },
   initialize: function(){
+    this.listenTo(challenges, 'sync', this.renderChallenges);
+    this.registerHandebarsHelpers();
     this.render();
   },
   // $el - it's a cached jQuery object (el), in which you can use jQuery functions 
@@ -105,16 +110,18 @@ var ChallengeFinderRoutes = Backbone.Router.extend({
 
 });
 
-var challenges = new Challenges();
-var view = new ChallengeView();
+var challenges = null;
+var view = null;
+
+// challenges.on("all", function(eventName) {
+//   console.log('ALL_EVENTS: ' + eventName);
+// });
 
 $(document).ready(function() {
-  view.registerHandebarsHelpers();
+  challenges = new Challenges();
+  view = new ChallengeView({collection: challenges});
   
   challenges.fetch({
-    success: function(collection, response, options) {
-      console.log("Success from collection.fetch()");
-    },
     error: function(collection, response, options) {
       console.log("Error from collection.fetch()");
     }

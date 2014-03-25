@@ -27,20 +27,32 @@ var Challenges = Backbone.Collection.extend({
 var ChallengeView = Backbone.View.extend({
   // el - stands for element. Every view has a element associate in with HTML 
   //      content will be rendered.
-  el: '#container',
+  el: '#challenges',
   // It's the first function called when this view it's instantiated.
-  renderChallenges: function() {
-    console.log("Render Challenges was called.");
-  },
-  initialize: function(){
-    this.listenTo(challenges, 'sync', this.renderChallenges);
+  initialize: function(options) {
     this.registerHandebarsHelpers();
-    this.render();
+    this.listenTo(this.collection, 'sync', this.render);
+    this.$el.html("Loading...");
   },
   // $el - it's a cached jQuery object (el), in which you can use jQuery functions 
   //       to push content. Like the Hello World in this case.
   render: function(){
-    this.$el.html("Hello World");
+    var source   = $("#index").html();
+    var template = Handlebars.compile(source);
+    var results  = template({challenges: this.collection});
+    console.log(this.collection.toJSON());
+    $("#challenges").html(results);
+  },
+
+  renderChallenges: function() {
+  },
+
+  render_challenge: function(challenge) {
+    console.log('Rendering challenge ' + challenge.title);
+    var source   = $("#challenge").html();
+    var template = Handlebars.compile(source);
+    var results = template(challenge.models);
+    $("#content").html(results)
   },
   
   registerHandebarsHelpers: function() {
@@ -53,7 +65,7 @@ var ChallengeView = Backbone.View.extend({
 
     Handlebars.registerHelper('date_str', function(d) {
       return new Handlebars.SafeString(
-        moment(d).format('ll')
+//        moment(d).format('ll')
       );
     });
 
@@ -70,21 +82,6 @@ var ChallengeView = Backbone.View.extend({
     });
   } // registerHandebarsHelpers
 });
-
-ChallengeView.prototype.render_challenge = function(challenge) {
-  console.log('Rendering challenge ' + challenge.title);
-  var source   = $("#challenge").html();
-  var template = Handlebars.compile(source);
-  var results = template(challenge);
-  $("#content").html(results)
-}
-
-ChallengeView.prototype.render_challenges = function() {
-  var source   = $("#index").html();
-  var template = Handlebars.compile(source);
-  var results = template({challenges: challenges});
-  $("#content").html(results)
-}
 
 /*
  *
@@ -122,6 +119,9 @@ $(document).ready(function() {
   view = new ChallengeView({collection: challenges});
   
   challenges.fetch({
+    success: function(collection, response, options) {
+      console.log("Success from collection.fetch()");
+    },
     error: function(collection, response, options) {
       console.log("Error from collection.fetch()");
     }

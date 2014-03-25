@@ -15,7 +15,7 @@ if [ ! "$(which yuicompressor)" ]; then
 	brew install yuicompressor || port install yuicompressor
 fi
 
-cd $DIR/../public/
+cd $DIR/../www/
 
 echo "Launching webserver in directory: $(pwd)"
 mongoose -listening_port 4000 -enable_directory_listing yes &

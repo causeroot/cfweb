@@ -1,1 +1,0 @@
-Run {tools/run_dev_server.sh} to run a local webserver.

@@ -3,7 +3,60 @@
  * Data Model
  *
  */
-var Challenge = Backbone.Model.extend({});
+var Challenge = Backbone.Model.extend({
+  
+  // this method is called each time a model is created
+  parse: function(response, options){
+    // sort the incoming awards and deadlines
+    response.awards = this.sort_awards(response.awards);
+    response.deadlines = this.sort_deadlines(response.deadlines);
+
+    // set a value for the template
+    if (response.awards[0]) response.top_award = response.awards[0].value;
+    if (response.deadlines[0]) response.top_deadline = response.deadlines[0].date;
+    
+    // return the challenge with sorted awards and deadlines to be used in the model
+    return response;
+  },
+  
+  sort_deadlines: function(deadlines) {
+    return deadlines.sort(function(a, b) {
+      if (a.date && b.date) {
+        var date1 = new Date(a.date);
+        var date2 = new Date(b.date);
+        if (date1.getTime() == date2.getTime()) {
+          console.log(a.date + ' is same a ' + b.date);
+          return 0;
+        }
+        if (date1.getTime() > date2.getTime()) {
+          return -1;
+          console.log(a.date + ' is larger than ' + b.date);
+        } else {
+          return 1;
+        }
+      } else {
+        console.log(a.date + ' is error in relation to ' + b.date);
+      }
+    });
+  },
+  
+  sort_awards: function(awards) {
+    return awards.sort(function(a, b) {
+      if (a.value && b.value) {
+        var aval = Number(a.value.replace(/[^0-9\.]+/g,""));
+        var bval = Number(b.value.replace(/[^0-9\.]+/g,""));
+        if (aval == bval) return 0;
+        if (a.value > b.value) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+    });
+  }
+  
+});
+
 
 var Challenges = Backbone.Collection.extend({
     model: Challenge,
@@ -11,7 +64,49 @@ var Challenges = Backbone.Collection.extend({
     
     // default sort for Challenges collection
     comparator: function (model) { 
+//      console.log("Comparing: " + model.get('title'));
+  //    console.debug(model);
       return model.get('title');
+    },
+    
+    sort_by_award: function(asc) {
+      
+    },
+
+    sort_by_posted_date: function(asc) {
+      
+    },
+
+    sort_by_deadline: function(asc) {
+      this.comparator = this.comparator_deadline;
+      this.sort();
+    },
+
+    comparator_deadline: function(a, b) {
+      console.log(a);
+      console.log(b);
+      if ((a.deadlines[0] && b.deadlines[0]) && (a.deadlines[0].date && b.deadlines[0].date)) {
+        var date1 = new Date(a.deadlines[0].date);
+        var date2 = new Date(b.deadlines[0].date);
+        if (date1.getTime() == date2.getTime()) {
+          if (a.id > b.id) {
+            return (asc) ? -1 : 1;
+          } else {
+            return (asc) ? 1 : -1;
+          }
+        }
+        if (date1.getTime() > date2.getTime()) {
+          return -1;
+        } else {
+          return 1;
+        }
+      } else {
+        if (a.id < b.id) {
+          return (asc) ? -1 : 1;
+        } else {
+          return (asc) ? 1 : -1;
+        }
+      }
     },
 
     initialize: function () {
@@ -39,12 +134,8 @@ var ChallengeView = Backbone.View.extend({
   render: function(){
     var source   = $("#index").html();
     var template = Handlebars.compile(source);
-    var results  = template({challenges: this.collection});
-    console.log(this.collection.toJSON());
+    var results  = template({challenges: this.collection.toJSON()});
     $("#challenges").html(results);
-  },
-
-  renderChallenges: function() {
   },
 
   render_challenge: function(challenge) {
@@ -64,8 +155,10 @@ var ChallengeView = Backbone.View.extend({
     });
 
     Handlebars.registerHelper('date_str', function(d) {
+      var d = moment(d).format('ll');
+      if ('Invalid date' == d) d = 'No Deadline';
       return new Handlebars.SafeString(
-//        moment(d).format('ll')
+        d
       );
     });
 
@@ -94,13 +187,14 @@ var ChallengeFinderRoutes = Backbone.Router.extend({
     "about":                 "about",      // #about
     "legal":                 "legal",      // #legal
     "challenges":            "challenges", // #legal
+    "sort/:sortBy":            "sort_challenges", // #legal
     "search/:query(/p:page)":  "search"    // #search/kiwis/p7
   },
 
   help: function() {
       
   },
-
+  
   search: function(query, page) {
     
   }
@@ -109,6 +203,7 @@ var ChallengeFinderRoutes = Backbone.Router.extend({
 
 var challenges = null;
 var view = null;
+var router = null;
 
 // challenges.on("all", function(eventName) {
 //   console.log('ALL_EVENTS: ' + eventName);
@@ -117,6 +212,12 @@ var view = null;
 $(document).ready(function() {
   challenges = new Challenges();
   view = new ChallengeView({collection: challenges});
+  router = new ChallengeFinderRoutes();
+  Backbone.history.start();
+  
+  view.on("all", function(msg) {
+        console.log(msg);
+  });
   
   challenges.fetch({
     success: function(collection, response, options) {

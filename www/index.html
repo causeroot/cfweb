@@ -19,9 +19,9 @@ https://stackoverflow.com/questions/20557912/creating-a-fixed-sidebar-alongside-
             <div class="col-md-11">
               <h1 class="page-header">// CHALLENGES</h1>
               <div class="sorting-links">
-                <a href="/?sort=deadline_d">Deadline</a> &nbsp;|&nbsp;
-                <a href="/?sort=posted_d">Date Posted</a> &nbsp;|&nbsp;
-                <a href="/?sort=award_d">Award</a>
+                <a href="#sort/deadline_d">Deadline</a> &nbsp;|&nbsp;
+                <a href="#sort/posted_d">Date Posted</a> &nbsp;|&nbsp;
+                <a href="#sort/award_d">Award</a>
               </div>
             </div>
             <div class="col-md-1">
@@ -35,6 +35,7 @@ https://stackoverflow.com/questions/20557912/creating-a-fixed-sidebar-alongside-
 
         <script src="js/jquery.js"></script>
         <script src="js/underscore.js"></script>
+        <script src="js/moment.min.js"></script>
         <script src="js/handlebars.js"></script>
         <script src="js/backbone.js"></script>
         <script src="js/bootstrap.min.js"></script>
@@ -46,7 +47,7 @@ https://stackoverflow.com/questions/20557912/creating-a-fixed-sidebar-alongside-
         <script type="text/x-handlebars" id="index">
           {{#each challenges}}
               <div class="col-md-2">
-                <img src="images/{{image_topic}}.jpg" width="100px" height="100px" />
+                <img src="img/{{image_topic}}.jpg" width="100px" height="100px" />
               </div>
               <div class="col-md-7">
                 <h5>{{link this}}</h5>

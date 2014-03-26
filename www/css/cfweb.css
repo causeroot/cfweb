@@ -9,6 +9,11 @@ a:hover {
 a:visited {
 	color: #000000;
 }
+.dot-divider {
+	letter-spacing: .7em;
+	padding-bottom: 1em;
+}
+
 .page-header {
 	display: inline;
 	border-bottom: none;

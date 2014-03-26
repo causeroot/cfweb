@@ -69,6 +69,22 @@ var Challenges = Backbone.Collection.extend({
       return model.get('title');
     },
     
+    sort_by_thing: function(thing) {
+      switch(thing) {
+      case "deadline_d":
+        this.sort_by_deadline();
+        break;
+      case "posted_d":
+        this.sort_by_posted_date();
+        break;
+      case "award_d":
+        this.sort_by_award();
+        break;
+      default:
+        console.log("ERROR: unknown thing: " + thing);
+      }        
+    },
+    
     sort_by_award: function(asc) {
       
     },
@@ -123,6 +139,26 @@ var ChallengeView = Backbone.View.extend({
   // el - stands for element. Every view has a element associate in with HTML 
   //      content will be rendered.
   el: '#challenges',
+  
+/*  // use a default sort order
+  getSortOrder: function() {
+    if (this.asc == null || this.asc == undefined) {
+      if ($.cookie('asc') == undefined) {
+        // set a default
+        console.debug('this.asc is undefined');
+        $.cookie('asc', true);
+      }
+      this.asc = $.cookie('asc');
+    }
+    return this.asc;
+  },
+  
+  setSortOrder: function(order) {
+    this.asc = order;
+    $.cookie('asc', order, { expires : 30 });
+  },
+  */
+  
   // It's the first function called when this view it's instantiated.
   initialize: function(options) {
     this.registerHandebarsHelpers();
@@ -187,7 +223,7 @@ var ChallengeFinderRoutes = Backbone.Router.extend({
     "about":                 "about",      // #about
     "legal":                 "legal",      // #legal
     "challenges":            "challenges", // #legal
-    "sort/:sortBy":            "sort_challenges", // #legal
+    "sort/:sortBy(/:asc)":            "sort", // #legal
     "search/:query(/p:page)":  "search"    // #search/kiwis/p7
   },
 
@@ -215,8 +251,8 @@ $(document).ready(function() {
   router = new ChallengeFinderRoutes();
   Backbone.history.start();
   
-  view.on("all", function(msg) {
-        console.log(msg);
+  router.on("route:sort", function(thing) {
+    challenges.sort_by_thing(thing);
   });
   
   challenges.fetch({

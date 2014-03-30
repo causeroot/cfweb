@@ -15,7 +15,13 @@ if [ ! "$(which yuicompressor)" ]; then
 	brew install yuicompressor || port install yuicompressor
 fi
 
-cd $DIR/../www/
+if [ "$1" == "test" ]; then
+	cd $DIR/../
+	url="http://localhost:4000/test/SpecRunner.html"
+else
+	cd $DIR/../www/
+	url="http://localhost:4000"
+fi
 
 echo "Launching webserver in directory: $(pwd)"
 mongoose -listening_port 4000 -enable_directory_listing yes &
@@ -23,8 +29,9 @@ MONGOOSE_PID=$!
 trap "echo Killing web server...; kill $MONGOOSE_PID; exit;" SIGINT SIGTERM ERR
 sleep 1
 if [ -d /Applications/Google\ Chrome.app ]; then
-  open -a Google\ Chrome "http://localhost:4000"
+  open -a Google\ Chrome $url
 else
-  open "http://localhost:4000"
+  open $url
 fi
+
 wait $MONGOOSE_PID 

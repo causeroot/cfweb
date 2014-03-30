@@ -1,0 +1,48 @@
+{
+    "awards": [
+        {
+            "description": "First Place Submission", 
+            "value": "$7,000,000"
+        }, 
+        {
+            "description": "Second Place Submission", 
+            "value": "$2,000,000"
+        }, 
+        {
+            "description": "Third Place Submission", 
+            "value": "$1,000,000"
+        }
+    ], 
+    "contact_info": "XPRIZE Foundation\n5510 Lincoln Blvd. Suite 100\nPlaya Vista, CA 90094-2034\nU.S.A\n\nTelephone: 310-741-4880\n\nQuestion Submission: http://www.qualcommtricorderxprize.org/about/contact-us\n\nPlease contact Vivan Cabral at 310-751-1434, with questions or comments regarding team registration.", 
+    "created_at": "2014-02-17T21:55:18Z", 
+    "deadlines": [
+        {
+            "date": "2013-08-30T00:00:00Z", 
+            "description": "Registration Deadline"
+        }, 
+        {
+            "date": "2014-04-17T00:00:00Z", 
+            "description": "Submissions Deadline"
+        }
+    ], 
+    "eligibility": "Subject to the below, teams from all countries and with any background who are eligible entities are eligible to compete in the Competition, including, but not limited to, small or large companies, not-for-profit foundations, and teams comprised of students and/or faculty from universities, colleges, or other academic institutions.\n\nTo be eligible to compete and claim any prize, a team must be an eligible entity, which means a legal entity: (i) validly existing, duly organized, and in good standing in the jurisdiction of its organization; (ii) to whom payments may be legally made from the United States in United States Dollars; (iii) organized in a jurisdiction in which the Competition is not prohibited by law; (iv) with a bank account into which funds can legally be deposited from the United States in United States Dollars; and (iv) with insurance, self-insurance, or other risk management means as required by applicable law and determined by the X PRIZE Foundation, in its sole discretion, to be adequate to protect against potential claims, losses, and damages arising from the team\u2019s participation in the Competition. Teams with any team members who are nationals or residents of countries and entities restricted by US export controls and sanctions programs are not eligible to participate in this Competition.", 
+    "fee": "Registration Fee for teams that register between 8 January 2013 and 11:59 a.m. PT, 21 June 2013: $5,000\nRegistration Fee for teams that register between noon PT 21 June 2013 and 11:59 a.m. PT, 1 August 2013: $10,000\nRegistration Fee for teams that register between noon PT 1 August 2013 and 11:59 a.m. PT, 30 August 2013: $25,000", 
+    "id": 9, 
+    "image_topic": "Technology", 
+    "image_url": "http://www.xprize.org/sites/xprize.org/files/logo.png", 
+    "index_deadline": "2013-08-30T00:00:00Z", 
+    "numeric_value": 7000000, 
+    "post_date": "2012-01-17T00:00:00Z", 
+    "resultant": "Teams_Retain_IP Furthering_Science", 
+    "rules": "The Qualcomm Tricorder XPRIZE is an incentivized competition open for approximately 3.5 years. Teams must advance through a Qualifying Round and a Final Round of judging. Up to three teams will be awarded a prize in the Final Round.\nFinalist teams will compete in both a diagnostic and consumer experience evaluation during the Final Round. The Final Round evaluation will occur in the United States, although the competition is open to teams from around the world. Teams will be expected to meet baseline standards of accuracy and functionality, but the winning entries will be the ones that score the highest in the diagnostic contest. To emphasize the importance of consumer use and adoption, only the five highest scoring teams from the consumer experience evaluation will be eligible to win.\n\nThe winners will be the (up to) three solutions achieving the highest diagnostic score regarding a set of 15 distinct diseases in a group of 15-30 people in three days (see Guidelines for full details). This diagnosis must be performed in the hands of a consumer, independently of a healthcare worker or facility.\n\nQualifying Round\n\nWhile precise dates are still being finalized, the following provides a general view of the competition schedule. The Qualifying Round will take place approximately 27-28 months after the January 2012 prize launch. From the Qualifying Round, 10 teams will advance based on:\n\n(a) a controlled demonstration of sensor validity; and\n(b) an evaluation of supporting studies, multimedia, and prototypes.\nFinal Round\n\nThe Final Round is scheduled to occur approximately 39-40 months after the prize launch. The Final Round competition will include:\n(a) a diagnostic competition on 15-30 consumers per team;\n(b) a concurrent consumer experience evaluation; and\n(c) proof of adequate high-frequency data logging.\nTeams advancing to the Final Round will compete in both the diagnostic and consumer experience evaluation portions of the competition.\nMore Information:  http://www.qualcommtricorderxprize.org/files/qtxp.org/Qualcomm_Tricorder_XPRIZE_Guidelines_20130329.pdf", 
+    "sponsor": "The XPRIZE Foundation", 
+    "status": "active", 
+    "structure": "Rounds", 
+    "summary": "The Qualcomm Tricorder XPRIZE is a $10 million global competition to stimulate innovation and integration of precision diagnostic technologies, making reliable health diagnoses available directly to 'health consumers' in their homes.\n\nThe dire need for improvements in health and healthcare in the U.S. has captured the attention of government, industry, and private citizens for years. But a viable solution has yet evaded one of the most technologically advanced, educated and prosperous nations on the globe. Integrated diagnostic technology, once available on a consumer mobile device that is easy to use, will allow individuals to incorporate health knowledge and decision-making into their daily lives.\n\nAdvances in fields such as artificial intelligence, wireless sensing, imaging diagnostics, lab-on-a-chip, and molecular biology will enable better choices in when, where, and how individuals receive care, thus making healthcare more convenient, affordable, and accessible. The winner will be the team whose technology most accurately diagnoses a set of diseases independent of a healthcare professional or facility, and that provides the best consumer user experience with their device.", 
+    "tag_line": "Healthcare in the palm of your hand", 
+    "title": "QUALCOMM Tricorder Xprize", 
+    "topic": "Technology APP Software", 
+    "updated_at": "2014-02-17T21:55:18Z", 
+    "url": "http://www.qualcommtricorderxprize.org/", 
+    "xpath_check": "http://www.qualcommtricorderxprize.org/competition-details/faqs/html/body/div[3]/section/div/div/div/div/div/div/div/article/div/div/div/div/ul[2]"
+}

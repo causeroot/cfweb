@@ -1,58 +1,116 @@
-describe("Player", function() {
-  var player;
-  var song;
+describe("Challenge Model", function() {
 
-  beforeEach(function() {
-    player = new Player();
-    song = new Song();
-  });
+//  beforeEach(function() {
+//    player = new Challenge();
+//  });
 
-  it("should be able to play a Song", function() {
-    player.play(song);
-    expect(player.currentlyPlayingSong).toEqual(song);
+  it('should be able to create its application test objects', function() {
+    var challenge = new Challenge({url:'fixtures/single_challenge.json'});
+    expect(challenge).toBeDefined();
 
-    //demonstrates use of custom matcher
-    expect(player).toBePlaying(song);
-  });
+    challenge = new Challenge({url:'fixtures/single_challenge_with_multiple_awards.json'});
+    expect(challenge).toBeDefined();
+    
+  });  
 
-  describe("when song has been paused", function() {
-    beforeEach(function() {
-      player.play(song);
-      player.pause();
-    });
-
-    it("should indicate that the song is currently paused", function() {
-      expect(player.isPlaying).toBeFalsy();
-
-      // demonstrates use of 'not' with a custom matcher
-      expect(player).not.toBePlaying(song);
-    });
-
-    it("should be possible to resume", function() {
-      player.resume();
-      expect(player.isPlaying).toBeTruthy();
-      expect(player.currentlyPlayingSong).toEqual(song);
+  it('should sort awards after parsing json', function(done) {
+    var challenge = new Challenge({url:'fixtures/single_challenge_with_multiple_awards.json'});
+    challenge.url = 'fixtures/single_challenge_with_multiple_awards.json';
+    challenge.fetch({
+      success: function(){
+        expect(challenge).toBeDefined();
+        var awards = challenge.get("awards");
+        expect(awards).toBeDefined();
+        expect(awards[0]).toBeDefined();
+        expect(awards[1]).toBeDefined();
+        expect(awards[0].value).toBeGreaterThan(awards[1].value);
+        done();
+      }
     });
   });
-
-  // demonstrates use of spies to intercept and test method calls
-  it("tells the current song if the user has made it a favorite", function() {
-    spyOn(song, 'persistFavoriteStatus');
-
-    player.play(song);
-    player.makeFavorite();
-
-    expect(song.persistFavoriteStatus).toHaveBeenCalledWith(true);
-  });
-
-  //demonstrates use of expected exceptions
-  describe("#resume", function() {
-    it("should throw an exception if song is already playing", function() {
-      player.play(song);
-
-      expect(function() {
-        player.resume();
-      }).toThrowError("song is already playing");
+  
+  it('should sort deadlines after parsing json', function(done) {
+    var challenge = new Challenge({url:'fixtures/single_challenge_with_multiple_awards.json'});
+    challenge.url = 'fixtures/single_challenge_with_multiple_awards.json';
+    challenge.fetch({
+      success: function(){
+        expect(challenge).toBeDefined();
+        var deadlines = challenge.get("deadlines");
+        expect(deadlines).toBeDefined();
+        expect(deadlines[1]).toBeDefined();
+        expect(deadlines[0]).toBeDefined();
+        expect(deadlines[0].date).toBeGreaterThan(deadlines[1].date);
+        done();
+      },
+      error: function() {
+        fail();
+      }
     });
   });
+  
+});
+
+describe("Challenges Collection", function() {
+  it('should evaluate dates properly', function() {
+    var d = new Date("2004-01-01T00:00:00Z");
+    expect(d.getTime()).toBe(1072915200000);
+    d = new Date("");
+    expect(d.getTime()).toBeNaN();
+  });
+
+  it('should sort by deadline', function(done) {
+    var challenges = new Challenges();
+    challenges.url = 'fixtures/data.json';
+    challenges.fetch({
+      success: function(){
+        challenges.sort_by_deadline(false);
+        var topDeadlines = challenges.at(1).get('deadlines')[0];
+        var secondDeadlines = challenges.at(0).get('deadlines')[0];
+        expect(topDeadlines.date).toBeGreaterThan(secondDeadlines.date);
+        done();
+      },
+      error: function() {
+        fail();
+      }
+    });  
+  });
+  
+  it('should sort by posted date', function(done) {
+    var challenges = new Challenges();
+    challenges.url = 'fixtures/data.json';
+    challenges.fetch({
+      success: function(){
+        challenges.sort_by_posted_date(false);
+        var topDate = challenges.at(0).get('post_date');
+        console.log(topDate);
+        var secondDate = challenges.at(1).get('post_date');
+        console.log(secondDate);
+        expect(topDate).toBeGreaterThan(secondDate);
+        done();
+      },
+      error: function() {
+        fail();
+      }
+    });  
+  });
+
+  
+
+  it('should sort by award', function(done) {
+    var challenges = new Challenges();
+    challenges.url = 'fixtures/data.json';
+    challenges.fetch({
+      success: function(){
+        challenges.sort_by_award(false);
+        var topAward = challenges.at(1).get('awards')[0];
+        var secondAward = challenges.at(0).get('awards')[0];
+        expect(topAward.value).toBeGreaterThan(secondAward.value);
+        done();
+      },
+      error: function() {
+        fail();
+      }
+    });  
+  });
+
 });

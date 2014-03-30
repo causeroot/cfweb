@@ -33,14 +33,19 @@ https://stackoverflow.com/questions/20557912/creating-a-fixed-sidebar-alongside-
           </div>
         </div>
 
-        <script src="js/jquery.js"></script>
-        <script src="js/jquery.cookie.js"></script>
-        <script src="js/underscore.js"></script>
-        <script src="js/moment.min.js"></script>
-        <script src="js/handlebars.js"></script>
-        <script src="js/backbone.js"></script>
-        <script src="js/bootstrap.min.js"></script>
+        <script src="js/lib/jquery.js"></script>
+        <script src="js/lib/jquery.cookie.js"></script>
+        <script src="js/lib/underscore.js"></script>
+        <script src="js/lib/moment.min.js"></script>
+        <script src="js/lib/handlebars.js"></script>
+        <script src="js/lib/backbone.js"></script>
+        <script src="js/lib/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
+        <script>
+          $(document).ready(function() {
+            var cfweb = CFWeb();
+          });
+        </script>
 
         <!-- The following <script> sections are Mustache.js templates.
              They remain invisible until they are rendered by

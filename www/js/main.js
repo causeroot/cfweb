@@ -60,7 +60,6 @@ var Challenge = Backbone.Model.extend({
 
 var Challenges = Backbone.Collection.extend({
     model: Challenge,
-    url: "js/data.json",
     
     // default sort for Challenges collection
     comparator: function (model) { 
@@ -86,29 +85,33 @@ var Challenges = Backbone.Collection.extend({
     },
     
     sort_by_award: function(asc) {
-      
-    },
-
-    sort_by_posted_date: function(asc) {
-      
-    },
-
-    sort_by_deadline: function(asc) {
-      this.comparator = this.comparator_deadline;
+      this.asc = asc;
+      this.comparator = this.comparator_award;
       this.sort();
     },
 
+    sort_by_posted_date: function(asc) {
+      this.asc = asc;
+      this.comparator = this.comparator_posted_date;
+      this.sort();
+    },
+
+    sort_by_deadline: function(asc) {
+      this.asc = asc;
+      this.comparator = this.comparator_deadline;
+      this.sort();
+    },
+    
+    //post_date
     comparator_deadline: function(a, b) {
-      console.log(a);
-      console.log(b);
-      if ((a.deadlines[0] && b.deadlines[0]) && (a.deadlines[0].date && b.deadlines[0].date)) {
+        if ((a.post_date != undefined && b.post_date != undefined) && (a.deadlines[0].date && b.deadlines[0].date)) {
         var date1 = new Date(a.deadlines[0].date);
         var date2 = new Date(b.deadlines[0].date);
         if (date1.getTime() == date2.getTime()) {
           if (a.id > b.id) {
-            return (asc) ? -1 : 1;
+            return (this.asc) ? -1 : 1;
           } else {
-            return (asc) ? 1 : -1;
+            return (this.asc) ? 1 : -1;
           }
         }
         if (date1.getTime() > date2.getTime()) {
@@ -118,9 +121,61 @@ var Challenges = Backbone.Collection.extend({
         }
       } else {
         if (a.id < b.id) {
-          return (asc) ? -1 : 1;
+          return (this.asc) ? -1 : 1;
         } else {
-          return (asc) ? 1 : -1;
+          return (this.asc) ? 1 : -1;
+        }
+      }
+    },
+    
+
+    comparator_posted_date: function(a, b) {
+      if (a.post_date != undefined && b.post_date != undefined) {
+        var date1 = new Date(a.post_date);
+        var date2 = new Date(b.post_date);
+        if (date1.getTime() == date2.getTime()) {
+          if (a.id > b.id) {
+            return (this.asc) ? -1 : 1;
+          } else {
+            return (this.asc) ? 1 : -1;
+          }
+        }
+        if (date1.getTime() > date2.getTime()) {
+          return -1;
+        } else {
+          return 1;
+        }
+      } else {
+        if (a.id < b.id) {
+          return (this.asc) ? -1 : 1;
+        } else {
+          return (this.asc) ? 1 : -1;
+        }
+      }
+    },
+
+    comparator_award: function(a, b) {
+      //TODO
+        if ((a.awards != undefined && b.awards != undefined) && (a.awards[0].date && b.awards[0].date)) {
+        var date1 = new Date(a.awards[0].date);
+        var date2 = new Date(b.awards[0].date);
+        if (date1.getTime() == date2.getTime()) {
+          if (a.id > b.id) {
+            return (this.asc) ? -1 : 1;
+          } else {
+            return (this.asc) ? 1 : -1;
+          }
+        }
+        if (date1.getTime() > date2.getTime()) {
+          return -1;
+        } else {
+          return 1;
+        }
+      } else {
+        if (a.id < b.id) {
+          return (this.asc) ? -1 : 1;
+        } else {
+          return (this.asc) ? 1 : -1;
         }
       }
     },
@@ -241,12 +296,10 @@ var challenges = null;
 var view = null;
 var router = null;
 
-// challenges.on("all", function(eventName) {
-//   console.log('ALL_EVENTS: ' + eventName);
-// });
-
-$(document).ready(function() {
-  challenges = new Challenges();
+function CFWeb(url) {
+  // set default value for json url
+  url = typeof url !== 'undefined' ? url : "js/data.json";
+  challenges = new Challenges({ url: url });
   view = new ChallengeView({collection: challenges});
   router = new ChallengeFinderRoutes();
   Backbone.history.start();
@@ -263,5 +316,4 @@ $(document).ready(function() {
       console.log("Error from collection.fetch()");
     }
   });
-});
-
+}

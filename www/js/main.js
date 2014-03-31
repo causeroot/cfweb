@@ -69,22 +69,6 @@ var Challenges = Backbone.Collection.extend({
       return model.get('title');
     },
     
-    sort_by_thing: function(thing) {
-      switch(thing) {
-      case "deadline_d":
-        this.sort_by_deadline();
-        break;
-      case "posted_d":
-        this.sort_by_posted_date();
-        break;
-      case "award_d":
-        this.sort_by_award();
-        break;
-      default:
-        console.log("ERROR: unknown thing: " + thing);
-      }        
-    },
-    
     sort_by_award: function(asc) {
       this.asc = asc;
       this.comparator = this.comparator_award;
@@ -253,7 +237,7 @@ var ChallengeFinderRoutes = Backbone.Router.extend({
     "about":                 "about",      // #about
     "legal":                 "legal",      // #legal
     "challenges":            "challenges", // #legal
-    "sort/:sortBy(/:asc)":            "sort", // #legal
+    "sort/:sortBy(/:asc)":   "sort", // #legal
     "search/:query(/p:page)":  "search"    // #search/kiwis/p7
   },
 
@@ -278,11 +262,29 @@ function CFWeb(url) {
   challenges.url = url;
   
   view = new ChallengeView({collection: challenges});
+  
+  view.listenTo(challenges, 'any', function(event) {
+    console.log("VIEW: " + event);
+  })
+  
   router = new ChallengeFinderRoutes();
   Backbone.history.start();
   
-  router.on("route:sort", function(thing) {
-    challenges.sort_by_thing(thing);
+  router.on("route:sort", function(thing, asc, thing3) {
+    asc = asc === null ? true : asc;
+    switch(thing) {
+    case "deadline":
+      challenges.sort_by_deadline();
+      break;
+    case "posted":
+      challenges.sort_by_posted_date();
+      break;
+    case "award":
+      challenges.sort_by_award();
+      break;
+    default:
+      console.log("ERROR: unknown thing: " + thing);
+    }            
   });
   
   challenges.fetch({

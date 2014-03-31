@@ -32,6 +32,7 @@ var Challenge = Backbone.Model.extend({
           return -1;
           console.log(a.date + ' is larger than ' + b.date);
         } else {
+          console.log(a.date + ' is less than ' + b.date);
           return 1;
         }
       } else {
@@ -92,7 +93,7 @@ var Challenges = Backbone.Collection.extend({
 
     sort_by_posted_date: function(asc) {
       this.asc = asc;
-      this.comparator = this.comparator_posted_date;
+      this.comparator = this.comparator_post_date;
       this.sort();
     },
 
@@ -102,71 +103,45 @@ var Challenges = Backbone.Collection.extend({
       this.sort();
     },
     
-    //post_date
     comparator_deadline: function(a, b) {
-        if ((a.post_date != undefined && b.post_date != undefined) && (a.deadlines[0].date && b.deadlines[0].date)) {
-        var date1 = new Date(a.deadlines[0].date);
-        var date2 = new Date(b.deadlines[0].date);
-        if (date1.getTime() == date2.getTime()) {
-          if (a.id > b.id) {
-            return (this.asc) ? -1 : 1;
-          } else {
-            return (this.asc) ? 1 : -1;
-          }
-        }
-        if (date1.getTime() > date2.getTime()) {
-          return -1;
-        } else {
-          return 1;
-        }
+      var date1 = new Date(a.get('deadlines')[0].date);
+      var date2 = new Date(b.get('deadlines')[0].date);
+      if (date1.getTime() == date2.getTime()) {
+        return 0;
+      }
+      if (date1.getTime() == date2.getTime()) return 0;
+      if (date1.getTime() > date2.getTime()) {
+        return (this.asc) ? 1 : -1;
       } else {
-        if (a.id < b.id) {
-          return (this.asc) ? -1 : 1;
-        } else {
-          return (this.asc) ? 1 : -1;
-        }
+        return (this.asc) ? -1 : 1;
       }
     },
-    
 
-    comparator_posted_date: function(a, b) {
-      if (a.post_date != undefined && b.post_date != undefined) {
-        var date1 = new Date(a.post_date);
-        var date2 = new Date(b.post_date);
-        if (date1.getTime() == date2.getTime()) {
-          if (a.id > b.id) {
-            return (this.asc) ? -1 : 1;
-          } else {
-            return (this.asc) ? 1 : -1;
-          }
-        }
-        if (date1.getTime() > date2.getTime()) {
-          return -1;
-        } else {
-          return 1;
-        }
+    comparator_post_date: function(a, b) {
+      date1 = new Date(a.get('post_date'));
+      date2 = new Date(b.get('post_date'));
+//      console.log(date1.getTime + ' : ' + date2.)
+      if (date1.getTime() > date2.getTime()) {
+        return (this.asc) ? 1 : -1;
       } else {
-        if (a.id < b.id) {
-          return (this.asc) ? -1 : 1;
-        } else {
-          return (this.asc) ? 1 : -1;
-        }
+        return (this.asc) ? -1 : 1;
       }
     },
 
     comparator_award: function(a, b) {
-      //TODO
-        if ((a.awards != undefined && b.awards != undefined) && (a.awards[0].date && b.awards[0].date)) {
-        var date1 = new Date(a.awards[0].date);
-        var date2 = new Date(b.awards[0].date);
-        if (date1.getTime() == date2.getTime()) {
+      awardsA = a.get('awards');
+      awardsB = b.get('awards');
+      if ((awardsA != undefined && awardsB != undefined) && (awardsA[0].value && awardsB[0].value)) {
+        var award1 = Number(awardsA[0].value.replace(/[^0-9\.]+/g,""));
+        var award2 = Number(awardsB[0].value.replace(/[^0-9\.]+/g,""));
+        if (award1 == award2) {
           if (a.id > b.id) {
             return (this.asc) ? -1 : 1;
           } else {
             return (this.asc) ? 1 : -1;
           }
         }
-        if (date1.getTime() > date2.getTime()) {
+        if (award1 > award2) {
           return -1;
         } else {
           return 1;

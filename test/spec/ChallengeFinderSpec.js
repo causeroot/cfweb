@@ -5,13 +5,44 @@ describe("Challenge Model", function() {
 //  });
 
   it('should be able to create its application test objects', function() {
-    var challenge = new Challenge({url:'fixtures/single_challenge.json'});
+    var challenge = new Challenge();
+    challenge.url = 'fixtures/single_challenge.json';
     expect(challenge).toBeDefined();
 
-    challenge = new Challenge({url:'fixtures/single_challenge_with_multiple_awards.json'});
+    challenge = new Challenge();
+    challenge.url = 'fixtures/single_challenge_with_multiple_awards.json';
     expect(challenge).toBeDefined();
+  });
+  
+  it('should trigger change event after loading json', function() {
+    var spy = sinon.spy();
     
-  });  
+    var challenge = new Challenge();
+    challenge.url = 'fixtures/single_challenge.json';
+    challenge.on('change', spy);
+    
+    challenge.fetch({
+      success: function(){
+        expect(challenge).toBeDefined();
+        expect(spy.called).toBeTruthy();
+      }
+    });
+    
+  });
+
+  it('should call parse before loading json', function() {
+    var challenge = new Challenge();
+    challenge.url = 'fixtures/single_challenge.json';
+    var spy = sinon.spy(challenge, 'parse');
+    
+    challenge.fetch({
+      success: function(){
+        expect(challenge).toBeDefined();
+        expect(spy.called).toBeTruthy();
+      }
+    });
+    
+  });
 
   it('should sort awards after parsing json', function(done) {
     var challenge = new Challenge({url:'fixtures/single_challenge_with_multiple_awards.json'});
@@ -58,15 +89,25 @@ describe("Challenges Collection", function() {
     expect(d.getTime()).toBeNaN();
   });
 
-  it('should sort by deadline', function(done) {
+  it('should sort collection by deadline', function(done) {
     var challenges = new Challenges();
     challenges.url = 'fixtures/data.json';
     challenges.fetch({
       success: function(){
         challenges.sort_by_deadline(false);
-        var topDeadlines = challenges.at(1).get('deadlines')[0];
-        var secondDeadlines = challenges.at(0).get('deadlines')[0];
-        expect(topDeadlines.date).toBeGreaterThan(secondDeadlines.date);
+        var previousChallenge = null;
+        
+        // expect the previous challenge to have an equal or greater date
+        challenges.each(function(currentChallenge) {
+          if (null == previousChallenge) {
+            previousChallenge = currentChallenge;
+            return;
+          } else {
+            var last = new Date(previousChallenge.get('deadlines')[0].date);
+            var current = new Date(currentChallenge.get('deadlines')[0].date);
+            expect(last.getTime() >= current.getTime()).toBeTruthy();
+          }
+        });
         done();
       },
       error: function() {
@@ -75,16 +116,17 @@ describe("Challenges Collection", function() {
     });  
   });
   
-  it('should sort by posted date', function(done) {
+  it('should sort collection by posted date', function(done) {
     var challenges = new Challenges();
     challenges.url = 'fixtures/data.json';
     challenges.fetch({
       success: function(){
-        challenges.sort_by_posted_date(false);
-        var topDate = challenges.at(0).get('post_date');
-        console.log(topDate);
-        var secondDate = challenges.at(1).get('post_date');
-        console.log(secondDate);
+        challenges.sort_by_posted_date(false); // descending
+        challenges.each(function(c) {
+          console.debug(c.get('post_date') + ' : ' + c.get('title'));
+        });
+        var topDate = new Date(challenges.at(0).get('post_date'));
+        var secondDate = new Date(challenges.at(1).get('post_date'));
         expect(topDate).toBeGreaterThan(secondDate);
         done();
       },
@@ -94,16 +136,17 @@ describe("Challenges Collection", function() {
     });  
   });
 
-  
-
-  it('should sort by award', function(done) {
+  it('should sort collection by award', function(done) {
     var challenges = new Challenges();
     challenges.url = 'fixtures/data.json';
     challenges.fetch({
       success: function(){
-        challenges.sort_by_award(false);
-        var topAward = challenges.at(1).get('awards')[0];
-        var secondAward = challenges.at(0).get('awards')[0];
+        challenges.sort_by_award(true);
+        challenges.each(function(c) {
+          console.debug(c.get('awards')[0].value + ' : ' + c.get('title'));
+        });
+        var topAward = challenges.at(0).get('awards')[0];
+        var secondAward = challenges.at(1).get('awards')[0];
         expect(topAward.value).toBeGreaterThan(secondAward.value);
         done();
       },

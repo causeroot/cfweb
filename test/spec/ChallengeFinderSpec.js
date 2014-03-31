@@ -122,8 +122,16 @@ describe("Challenges Collection", function() {
     challenges.fetch({
       success: function(){
         challenges.sort_by_posted_date(false); // descending
-        challenges.each(function(c) {
-          console.debug(c.get('post_date') + ' : ' + c.get('title'));
+        var previousChallenge = null;
+        challenges.each(function(currentChallenge) {
+          if (null == previousChallenge) {
+            previousChallenge = currentChallenge;
+            return;
+          } else {
+            var last = new Date(previousChallenge.get('post_date'));
+            var current = new Date(currentChallenge.get('post_date'));
+            expect(last.getTime() >= current.getTime()).toBeTruthy();
+          }
         });
         var topDate = new Date(challenges.at(0).get('post_date'));
         var secondDate = new Date(challenges.at(1).get('post_date'));
@@ -141,13 +149,18 @@ describe("Challenges Collection", function() {
     challenges.url = 'fixtures/data.json';
     challenges.fetch({
       success: function(){
-        challenges.sort_by_award(true);
-        challenges.each(function(c) {
-          console.debug(c.get('awards')[0].value + ' : ' + c.get('title'));
+        challenges.sort_by_award(true); // ascending
+        var previousChallenge = null;
+        challenges.each(function(currentChallenge) {
+          if (null == previousChallenge) {
+            previousChallenge = currentChallenge;
+            return;
+          } else {
+            var previousAward = Number(previousChallenge.get('awards')[0].value.replace(/[^0-9\.]+/g,""));
+            var currentAward = Number(currentChallenge.get('awards')[0].value.replace(/[^0-9\.]+/g,""));
+            expect(previousAward >= currentAward).toBeTruthy();
+          }
         });
-        var topAward = challenges.at(0).get('awards')[0];
-        var secondAward = challenges.at(1).get('awards')[0];
-        expect(topAward.value).toBeGreaterThan(secondAward.value);
         done();
       },
       error: function() {
@@ -155,5 +168,4 @@ describe("Challenges Collection", function() {
       }
     });  
   });
-
 });

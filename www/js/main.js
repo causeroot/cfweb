@@ -274,7 +274,9 @@ var router = null;
 function CFWeb(url) {
   // set default value for json url
   url = typeof url !== 'undefined' ? url : "js/data.json";
-  challenges = new Challenges({ url: url });
+  challenges = new Challenges();
+  challenges.url = url;
+  
   view = new ChallengeView({collection: challenges});
   router = new ChallengeFinderRoutes();
   Backbone.history.start();
